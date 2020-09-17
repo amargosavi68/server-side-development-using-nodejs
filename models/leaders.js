@@ -20,11 +20,6 @@ const leaderSchema = new Schema({
         required: true
     },
 
-    featured: {
-        type: Boolean,
-        default: false
-    },
-
     abbr: {
         type: String,
         required: true
@@ -33,7 +28,13 @@ const leaderSchema = new Schema({
     description: {
         type: String,
         required: true
+    },
+
+    featured: {
+        type: Boolean,
+        default: false
     }
+
 });
 
 var Leaders = mongoose.model('Leader', leaderSchema);
