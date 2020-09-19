@@ -45,57 +45,35 @@ app.use(session({
   store: new FileStore()
 }))
 
+// This pages can access by user before authentication.
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
 function auth(req, res, next) {
   console.log(req.session);
 
-  if (!req.session.user) {
-    var authHeader = req.headers.authorization;
+  console.log(req.session);
 
-    if (!authHeader) {
-      var err = new Error("You are not authorized user..");
-      res.setHeader('WWW-Authenticate', 'Basic');
-      err.status = 401;
-      next(err); // control pass to the error handler..
-      return;
-    }
-    else {
-      var Auth = new Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
-      var username = Auth[0];
-      var password = Auth[1];
-
-      if (username === 'admin' && password === 'password'){
-        req.session.user = 'admin'
-        next(); //authorized user
-      }
-      else{
-        err = new Error("You are not authorized user..");
-        res.setHeader('WWW-Authenticate', 'Basic');
-        err.status = 401;
-        next(err); // control pass to the error handler..
-        return;
-      }
-    }
+  if(!req.session.user) {
+      var err = new Error('You are not authenticated!');
+      err.status = 403;
+      return next(err);
   }
   else {
-    if(req.session.user === 'admin') {
-      console.log('req.session:', req.session);
+    if (req.session.user === 'authenticated') {
       next();
     }
     else {
-      err = new Error("You are not authorized user..");
-      err.status = 401;
-      next(err); // control pass to the error handler..
-      return;
+      var err = new Error('You are not authenticated!');
+      err.status = 403;
+      return next(err);
     }
   }
-
 }
 
 app.use(auth);
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/dishes', dishRouter);
 app.use('/promotions',promoRouter);
 app.use('/leaders', leaderRouter);
