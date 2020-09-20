@@ -27,7 +27,7 @@ var leaderRouter = require('./routes/leaderRouter');
 var app = express();
 
 // Server connection
-mongoose.connect(url)
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 .then((db) => {
   console.log("Connected correctly to the server..");
 }, (err) => console.log(err))
