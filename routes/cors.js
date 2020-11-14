@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 
 //explicitely added origins in whitelist[]
-const whitelist = ['http://localhost:3000', 'https://localhost:3443', 'http://localhost:4200'];
+// whitelist array contains address of incoming requests which is deleted for now but you can add it afterwards below.
 
 var corsOptionsDelegate = (req, callback) => {
      var corsOptions;
